@@ -8,6 +8,6 @@ def main(input_image, output_path):
         landmarks = face_detector(img)
         for i,landmark in enumerate(landmarks):
             face = helper.crop_face(img, landmark)
-            face.save(output_path)
+            face.save(f'{output_path}-{i}.jpg')
     except:
         print("Failed to generete profile photo!")
