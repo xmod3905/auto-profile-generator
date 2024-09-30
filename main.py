@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFilter
 from typing import Union, List
 import dlib
 import numpy as np
@@ -77,12 +77,34 @@ def crop_face(
 
 face_detector = get_dlib_face_detector()
 
+def add_background(face_img, background_color="#FAFAFA"):
+    bg = Image.new("RGBA", face_img.size, background_color)
+    bg.paste(face_img, (0, 0), face_img)
+    
+    return bg
+
+def add_background(face_img, background_color="#FAFAFA"):
+    bg = Image.new("RGBA", face_img.size, background_color)
+    
+    # Tempelkan wajah di atas latar belakang
+    bg.paste(face_img, (0, 0), face_img)
+    
+    return bg
 def main(input_image, output_path):
-    try:
-        img = Image.open(input_image).convert("RGB")
-        landmarks = face_detector(img)
-        for i,landmark in enumerate(landmarks):
-            face = crop_face(img, landmark)
-            face.save(f'{output_path}-{i}.jpg')
-    except:
-        print("Failed to generete profile photo!")
+    # try:
+        img = Image.open(input_image).convert("RGBA")
+        landmarks = face_detector(img.convert("RGB"))
+        
+        for i, landmark in enumerate(landmarks):
+            face = crop_face(img, landmark, 1.35)
+            face_with_bg_white = add_background(face, "#FAFAFA")
+            face_with_bg_black = add_background(face, "#2B2B2b")
+            face.save(f'{output_path}-{i}.png', format='PNG')
+            face_with_bg_white.convert("RGB").save(f'{output_path}-{i}-white.jpg', format='JPEG')
+            face_with_bg_black.convert("RGB").save(f'{output_path}-{i}-black.jpg', format='JPEG')
+            
+        print("Foto profil berhasil dibuat!")
+
+    # except Exception as e:
+    #     print(f"Failed to generate profile photo: {e}")
+main('Gaya E-sport right copy.png', 'hu')
