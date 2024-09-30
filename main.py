@@ -1,4 +1,4 @@
-import helper
+from profileGen import main
 from PIL import Image
 face_detector = helper.get_dlib_face_detector()
 
