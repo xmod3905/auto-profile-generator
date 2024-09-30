@@ -80,18 +80,17 @@ face_detector = get_dlib_face_detector()
 def add_background(face_img, background_color="#FAFAFA"):
     bg = Image.new("RGBA", face_img.size, background_color)
     bg.paste(face_img, (0, 0), face_img)
-    
     return bg
 
 def add_background(face_img, background_color="#FAFAFA"):
     bg = Image.new("RGBA", face_img.size, background_color)
     
-    # Tempelkan wajah di atas latar belakang
+    # wajah di atas latar belakang
     bg.paste(face_img, (0, 0), face_img)
     
     return bg
 def main(input_image, output_path):
-    # try:
+    try:
         img = Image.open(input_image).convert("RGBA")
         landmarks = face_detector(img.convert("RGB"))
         
@@ -105,6 +104,5 @@ def main(input_image, output_path):
             
         print("Foto profil berhasil dibuat!")
 
-    # except Exception as e:
-    #     print(f"Failed to generate profile photo: {e}")
-main('Gaya E-sport right copy.png', 'hu')
+    except Exception as e:
+        print(f"Failed to generate profile photo: {e}")
